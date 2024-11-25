@@ -37,8 +37,8 @@ class Book:
             'author': self.author,
             'year': self.year,
             'status': self.status.value,
-            'status_changed': self.status_changed,
-            'created_at': self.created_at,
+            'status_changed': str(self.status_changed),
+            'created_at': str(self.created_at,)
         }
         return book_as_dict
 
@@ -57,8 +57,12 @@ class Library:
     def __init__(self, storage_path: str = 'library.json') -> None:
         self.storage_path = storage_path
 
-    def add_book(self, title: str, author: str, year: int) -> ...:
-        ...
+    def add_book(self, title: str, author: str, year: int) -> str:
+        new_book = Book(title, author, year)
+        library = self._open_storage(self.storage_path)
+        library['books'].append(new_book.to_dict())
+        self._save_to_storage(library)
+        return f'{new_book!s}\nКнига добавлена в библиотеку.'
 
     def delete_book(self, id: int) -> ...:
         ...
@@ -73,8 +77,17 @@ class Library:
     def set_book_status(self, id: int, status: Status) -> ...:  # Как удобнее вводить статус?
         ...
 
+    def _open_storage(self, path: str) -> dict[str, int | list[dict[str, str | int]]]:
+        with open(path, 'r') as f:
+            content = json.load(f)
+        return content
+
+    def _save_to_storage(self, data) -> None:
+        with open(self.storage_path, 'w') as f:
+            f.write(json.dumps(data))
+
 
 if __name__ == '__main__':
-    book = Book('Война и Мир', 'Толстой Л.Н.', 1873)
-    print(f'{book!s}')  # PRINT_DEL
-    print(f'{book!r}')  # PRINT_DEL
+    library = Library()
+    print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
+    print(library._open_storage('library.json'))  # PRINT_DEL
