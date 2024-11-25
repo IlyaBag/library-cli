@@ -53,6 +53,27 @@ class Book:
                 f'Status_changed="{self.status_changed}">')
 
 
+class Library:
+    def __init__(self, storage_path: str = 'library.json') -> None:
+        self.storage_path = storage_path
+
+    def add_book(self, title: str, author: str, year: int) -> ...:
+        ...
+
+    def delete_book(self, id: int) -> ...:
+        ...
+
+    def find_book(self, title: str | None = None, author: str | None = None,
+                  year: int | None = None) -> ...:
+        ...
+
+    def get_all_books(self) -> ...:
+        ...
+
+    def set_book_status(self, id: int, status: Status) -> ...:  # Как удобнее вводить статус?
+        ...
+
+
 if __name__ == '__main__':
     book = Book('Война и Мир', 'Толстой Л.Н.', 1873)
     print(f'{book!s}')  # PRINT_DEL
