@@ -14,16 +14,32 @@ class Status(enum.Enum):
 
 class Book:
     def __init__(self, title: str, author: str, year: int,
-                 storage='library.json') -> None:
+                 storage: str = 'library.json',
+                 id: int | None = None,
+                 status: Status | None = None,
+                 status_changed: str | None = None,
+                 created_at: str | None = None) -> None:
         self.__storage = storage
 
-        self.id = self.__set_id()
         self.title = title
         self.author = author
         self.year = year
-        self.status = Status.available
-        self.created_at = datetime.now(timezone.utc)
-        self.status_changed = self.created_at
+        if not id:
+            self.id = self.__set_id()
+        else:
+            self.id = id
+        if not status:
+            self.status = Status.available
+        else:
+            self.status = status
+        if not created_at:
+            self.created_at = datetime.now(timezone.utc)
+        else:
+            self.created_at = datetime.fromisoformat(created_at)
+        if not status_changed:
+            self.status_changed = self.created_at
+        else:
+            self.status_changed = datetime.fromisoformat(status_changed)
 
     def __set_id(self) -> int:
         with open(self.__storage, 'r') as f:
@@ -121,5 +137,5 @@ class Library:
 if __name__ == '__main__':
     library = Library()
     print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=8))
+    print(library.delete_book(id=10))
     # print(library._open_storage('library.json'))  # PRINT_DEL
