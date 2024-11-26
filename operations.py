@@ -7,7 +7,7 @@ from typing import TypeAlias
 BooksBunch: TypeAlias = list[dict[str, str | int]]
 
 
-class Status(enum.Enum):
+class Status(enum.StrEnum):
     available = 'в наличии'
     out = 'выдана'
 
@@ -56,7 +56,7 @@ class Book:
             'title': self.title,
             'author': self.author,
             'year': self.year,
-            'status': self.status.value,
+            'status': self.status,
             'status_changed': str(self.status_changed),
             'created_at': str(self.created_at)
         }
@@ -140,7 +140,7 @@ class Library:
 if __name__ == '__main__':
     library = Library()
     # print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=18))
+    print(library.delete_book(id=19))
     # print(library._open_storage('library.json'))  # PRINT_DEL
     for book in library.get_all_books():
         print(book)
