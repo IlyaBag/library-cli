@@ -43,8 +43,8 @@ class Book:
         return book_as_dict
 
     def __str__(self) -> str:
-        return (f'"{self.title}", {self.author}, {self.year} '
-                f'(с {self.status_changed.date()} {self.status.value})')
+        return (f'[{str(self.id)+"]":<4}"{self.title}", {self.author}, '
+                f'{self.year} (с {self.status_changed.date()} {self.status})')
 
     def __repr__(self) -> str:
         return (f'<Book({self.id}) Created_at="{self.created_at}"; '
