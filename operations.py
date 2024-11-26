@@ -86,7 +86,7 @@ class Library:
             content = json.load(f)
         return content
 
-    def _save_to_storage(self, data) -> None:
+    def _save_to_storage(self, data: dict[str, int | BooksBunch]) -> None:
         with open(self.storage_path, 'w') as f:
             f.write(json.dumps(data))
 
