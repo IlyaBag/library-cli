@@ -16,7 +16,7 @@ class Book:
     def __init__(self, title: str, author: str, year: int,
                  storage: str = 'library.json',
                  id: int | None = None,
-                 status: Status | None = None,
+                 status: Status | str | None = None,
                  status_changed: str | None = None,
                  created_at: str | None = None) -> None:
         self.__storage = storage
@@ -31,7 +31,7 @@ class Book:
         if not status:
             self.status = Status.available
         else:
-            self.status = status
+            self.status = Status(status)
         if not created_at:
             self.created_at = datetime.now(timezone.utc)
         else:
@@ -138,5 +138,5 @@ class Library:
 if __name__ == '__main__':
     library = Library()
     print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=15))
+    print(library.delete_book(id=16))
     # print(library._open_storage('library.json'))  # PRINT_DEL
