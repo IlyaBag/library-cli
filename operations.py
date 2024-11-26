@@ -1,6 +1,10 @@
 import enum
 import json
 from datetime import datetime, timezone
+from typing import TypeAlias
+
+
+BooksBunch: TypeAlias = list[dict[str, str | int]]
 
 
 class Status(enum.Enum):
@@ -77,7 +81,7 @@ class Library:
     def set_book_status(self, id: int, status: Status) -> ...:  # Как удобнее вводить статус?
         ...
 
-    def _open_storage(self, path: str) -> dict[str, int | list[dict[str, str | int]]]:
+    def _open_storage(self, path: str) -> dict[str, int | BooksBunch]:
         with open(path, 'r') as f:
             content = json.load(f)
         return content
