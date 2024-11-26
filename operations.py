@@ -103,8 +103,10 @@ class Library:
                   year: int | None = None) -> ...:
         ...
 
-    def get_all_books(self) -> ...:
-        ...
+    def get_all_books(self) -> list[Book]:
+        library = self._open_storage(self.storage_path)
+        all_books = [Book(**book) for book in library['books']]
+        return all_books
 
     def set_book_status(self, id: int, status: Status) -> ...:  # Как удобнее вводить статус?
         ...
@@ -137,6 +139,8 @@ class Library:
 
 if __name__ == '__main__':
     library = Library()
-    print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=16))
+    # print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
+    print(library.delete_book(id=18))
     # print(library._open_storage('library.json'))  # PRINT_DEL
+    for book in library.get_all_books():
+        print(book)
