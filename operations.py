@@ -68,8 +68,19 @@ class Library:
         self._save_to_storage(library)
         return f'{new_book!s}\nКнига добавлена в библиотеку.'
 
-    def delete_book(self, id: int) -> ...:
-        ...
+    def delete_book(self, id: int) -> str:
+        """Delete book from storage by given id."""
+        if id < 1:
+            raise ValueError(
+                'Parameter "id" must be greater than or equal to 1, got', id
+            )
+        library = self._open_storage(self.storage_path)
+        index = self._find_index_by_id(id, library['books'])
+        if index is None:
+            return f'Книга с id = {id} не найдена.'
+        deleted_book = library['books'].pop(index)
+        self._save_to_storage(library)
+        return f'{deleted_book}\nКнига удалена'
 
     def find_book(self, title: str | None = None, author: str | None = None,
                   year: int | None = None) -> ...:
@@ -90,8 +101,25 @@ class Library:
         with open(self.storage_path, 'w') as f:
             f.write(json.dumps(data))
 
+    def _find_index_by_id(self, id: int, data: BooksBunch) -> int | None:
+        """Find the book index in the list of all saved books by given id."""
+        if len(data) == 0:
+            return None
+        i_start = 0
+        i_end = len(data) - 1
+        while i_start <= i_end:
+            i_mid = (i_start + i_end) // 2
+            if id == (mid_val := data[i_mid]['id']):
+                return i_mid
+            elif id > mid_val:
+                i_start = i_mid + 1
+            else:
+                i_end = i_mid - 1
+        return None
+
 
 if __name__ == '__main__':
     library = Library()
     print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library._open_storage('library.json'))  # PRINT_DEL
+    print(library.delete_book(id=8))
+    # print(library._open_storage('library.json'))  # PRINT_DEL
