@@ -100,8 +100,18 @@ class Library:
         return f'{deleted_book}\nКнига удалена'
 
     def find_book(self, title: str | None = None, author: str | None = None,
-                  year: int | None = None) -> ...:
-        ...
+                  year: int | None = None) -> list[Book] | str:
+        library = self._open_storage(self.storage_path)
+        kwargs = {'title': title, 'author': author, 'year': year}
+        search_criterias = {k: v for k, v in kwargs.items() if v is not None}
+        finded_books = []
+        for book in library['books']:
+            fields_to_compare = {k: book.get(k) for k in search_criterias}
+            if search_criterias == fields_to_compare:
+                finded_books.append(Book(**book))
+        if not finded_books:
+            return 'Ни одной книги не найдено'
+        return finded_books
 
     def get_all_books(self) -> list[Book]:
         library = self._open_storage(self.storage_path)
@@ -142,5 +152,6 @@ if __name__ == '__main__':
     # print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
     print(library.delete_book(id=19))
     # print(library._open_storage('library.json'))  # PRINT_DEL
-    for book in library.get_all_books():
-        print(book)
+    # for book in library.get_all_books():
+    #     print(book)
+    print(library.find_book(author='Толстой Л.Н.', title='Война и Мир'))
