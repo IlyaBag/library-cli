@@ -38,7 +38,7 @@ class Book:
             'year': self.year,
             'status': self.status.value,
             'status_changed': str(self.status_changed),
-            'created_at': str(self.created_at,)
+            'created_at': str(self.created_at)
         }
         return book_as_dict
 
