@@ -94,7 +94,8 @@ class Library:
         index = self._find_index_by_id(id, library['books'])
         if index is None:
             return f'Книга с id = {id} не найдена.'
-        deleted_book = library['books'].pop(index)
+        deleted = library['books'].pop(index)
+        deleted_book = Book(**deleted)
         self._save_to_storage(library)
         return f'{deleted_book}\nКнига удалена'
 
@@ -137,5 +138,5 @@ class Library:
 if __name__ == '__main__':
     library = Library()
     print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=10))
+    print(library.delete_book(id=15))
     # print(library._open_storage('library.json'))  # PRINT_DEL
