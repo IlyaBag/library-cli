@@ -1,5 +1,6 @@
 import enum
 import json
+import os
 from datetime import datetime, timezone
 from typing import TypeAlias
 
@@ -96,8 +97,10 @@ class Library:
     by a json file.
     """
 
-    def __init__(self, storage_path: str = 'library.json') -> None:
+    def __init__(self, storage_path: str) -> None:
         self.storage_path = storage_path
+        if not os.path.exists(storage_path):
+            self._init_new_storage(storage_path)
 
     def add_book(self, title: str, author: str, year: int) -> str:
         """Create new book and save it to storage."""
@@ -146,6 +149,10 @@ class Library:
         library['books'][index] = book.to_dict()
         self._save_to_storage(library)
         return f'{book}\nСтатус книги изменён'
+
+    def _init_new_storage(self, path: str) -> None:
+            with open(path, 'w') as f:
+                f.write('{"id_count": 0, "books": []}')
 
     def _open_storage(self, path: str) -> dict[str, int | BooksBunch]:
         """Open json file and return deserialized object."""
