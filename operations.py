@@ -190,14 +190,3 @@ class Library:
             else:
                 i_end = i_mid - 1
         return None
-
-
-if __name__ == '__main__':
-    library = Library()
-    # print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=23))
-    # print(library._open_storage('library.json'))  # PRINT_DEL
-    for book in library.get_all_books():
-        print(book)
-    # print(library.find_book(author='Толстой Л.Н.', title='Война и Мир'))
-    print(library.set_book_status(24, 'выдана'))
