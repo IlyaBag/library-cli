@@ -15,6 +15,8 @@ class Status(enum.StrEnum):
 
 
 class Book:
+    """Represent a book in a library."""
+
     def __init__(self, title: str, author: str, year: int,
                  storage: str = 'library.json',
                  id: int | None = None,
@@ -44,6 +46,10 @@ class Book:
             self.status_changed = datetime.fromisoformat(status_changed)
 
     def __set_id(self) -> int:
+        """Retrieve id counter from storage, increment it and save new value of
+        counter. Return id for creating new Book instance.
+        """
+
         with open(self.__storage, 'r') as f:
             lib_content = json.load(f)
         new_id = lib_content['id_count'] + 1
@@ -53,10 +59,16 @@ class Book:
         return new_id
 
     def chage_status(self, status: Status) -> None:
+        """Update status-bounded atributes of Book instance."""
         self.status = status
         self.status_changed = datetime.now(timezone.utc)
 
     def to_dict(self) -> dict[str, str | int]:
+        """Convert the instanse of the class to a dict which keys are names of
+        class atributes and values are atribute values. Return the resulting
+        dict.
+        """
+
         book_as_dict = {
             'id': self.id,
             'title': self.title,
@@ -80,10 +92,15 @@ class Book:
 
 
 class Library:
+    """Provide methods for managing a library's storage of books represented
+    by a json file.
+    """
+
     def __init__(self, storage_path: str = 'library.json') -> None:
         self.storage_path = storage_path
 
     def add_book(self, title: str, author: str, year: int) -> str:
+        """Create new book and save it to storage."""
         new_book = Book(title, author, year)
         library = self._open_storage(self.storage_path)
         library['books'].append(new_book.to_dict())
@@ -100,6 +117,10 @@ class Library:
 
     def find_book(self, title: str | None = None, author: str | None = None,
                   year: int | None = None) -> list[Book] | str:
+        """Strict search of book in a storage. Attributes 'title', 'author' and
+        'year' can be combined in any way and refine the search.
+        """
+
         library = self._open_storage(self.storage_path)
         kwargs = {'title': title, 'author': author, 'year': year}
         search_criterias = {k: v for k, v in kwargs.items() if v is not None}
@@ -113,6 +134,7 @@ class Library:
         return finded_books
 
     def get_all_books(self) -> list[Book]:
+        """Retrieve all books from storage and return list of all books."""
         library = self._open_storage(self.storage_path)
         all_books = [Book(**book) for book in library['books']]
         return all_books
@@ -128,11 +150,13 @@ class Library:
         return f'{book}\nСтатус книги изменён'
 
     def _open_storage(self, path: str) -> dict[str, int | BooksBunch]:
+        """Open json file and return deserialized object."""
         with open(path, 'r') as f:
             content = json.load(f)
         return content
 
     def _save_to_storage(self, data: dict[str, int | BooksBunch]) -> None:
+        """Save given data to json file."""
         with open(self.storage_path, 'w') as f:
             f.write(json.dumps(data))
 
