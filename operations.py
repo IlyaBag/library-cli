@@ -116,7 +116,7 @@ class Library:
         return f'{book}\nКнига удалена'
 
     def find_book(self, title: str | None = None, author: str | None = None,
-                  year: int | None = None) -> list[Book] | str:
+                  year: int | None = None) -> list[Book]:
         """Strict search of book in a storage. Attributes 'title', 'author' and
         'year' can be combined in any way and refine the search.
         """
@@ -129,8 +129,6 @@ class Library:
             fields_to_compare = {k: book.get(k) for k in search_criterias}
             if search_criterias == fields_to_compare:
                 finded_books.append(Book(**book))
-        if not finded_books:
-            return 'Ни одной книги не найдено'
         return finded_books
 
     def get_all_books(self) -> list[Book]:
