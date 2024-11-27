@@ -1,0 +1,2 @@
+class BookNotFoundError(LookupError):
+    pass

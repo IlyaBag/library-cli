@@ -3,6 +3,8 @@ import json
 from datetime import datetime, timezone
 from typing import TypeAlias
 
+from exceptions import BookNotFoundError
+
 
 BooksBunch: TypeAlias = list[dict[str, str | int]]
 
@@ -148,7 +150,7 @@ class Library:
                              f'to 1, got {id}')
         index = self._find_index_by_id(id, data)
         if index is None:
-            return None, None  # Exception в функции
+            raise BookNotFoundError(f'Книга с id={id} не найдена.')
         return index, Book(**data[index])
 
     def _find_index_by_id(self, id: int, data: BooksBunch) -> int | None:
