@@ -92,18 +92,11 @@ class Library:
 
     def delete_book(self, id: int) -> str:
         """Delete book from storage by given id."""
-        if id < 1:
-            raise ValueError(
-                'Parameter "id" must be greater than or equal to 1, got', id
-            )
         library = self._open_storage(self.storage_path)
-        index = self._find_index_by_id(id, library['books'])
-        if index is None:
-            return f'Книга с id = {id} не найдена.'
-        deleted = library['books'].pop(index)
-        deleted_book = Book(**deleted)
+        index, book = self._get_book_by_id(id, library['books'])
+        library['books'].pop(index)
         self._save_to_storage(library)
-        return f'{deleted_book}\nКнига удалена'
+        return f'{book}\nКнига удалена'
 
     def find_book(self, title: str | None = None, author: str | None = None,
                   year: int | None = None) -> list[Book] | str:
@@ -173,9 +166,9 @@ class Library:
 if __name__ == '__main__':
     library = Library()
     # print(library.add_book('Война и Мир', 'Толстой Л.Н.', 1873))  # PRINT_DEL
-    print(library.delete_book(id=21))
+    print(library.delete_book(id=23))
     # print(library._open_storage('library.json'))  # PRINT_DEL
     for book in library.get_all_books():
         print(book)
     # print(library.find_book(author='Толстой Л.Н.', title='Война и Мир'))
-    print(library.set_book_status(0, 'выдана'))
+    print(library.set_book_status(24, 'выдана'))
